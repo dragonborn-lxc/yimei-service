@@ -24,3 +24,5 @@ NetBeans
 /nbdist/
 /.nb-gradle/
 
+**/.DS_Store
+**/target/
