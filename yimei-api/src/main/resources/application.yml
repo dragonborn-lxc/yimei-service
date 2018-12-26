@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: yimei-api
+  profiles:
+    active: prod
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: com.ymcoffee.base.hibernate.TableNamingStrategy
+    show-sql: true
+    databasePlatform: org.hibernate.dialect.MySQL5InnoDBDialect
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://cdb-e7re5bhg.cd.tencentcdb.com:10027/yimei?useSSL=false
+    username: root
+    password: 3edc$RFV
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      read-only: false
+      connection-timeout: 60000
+      idle-timeout: 600000
+      minimum-idle: 5
+      maximum-pool-size: 30
+      connection-test-query: select 1 from dual
+  redis:
+    host: 127.0.0.1
+    database: 0
+server:
+  context-path: /yimei-api
+  tomcat:
+    max-threads: 3000
+    max-connections: 3000
+
+  connection-timeout: 300000
+  port: 18001
+
+
+#eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:adminv587NB1024@127.0.0.1:8761/eureka/
+
+
+global:
+  # 短信服务配置
+  sms:
+    turnOn: true
+    submail:
+      path: https://api.mysubmail.com/message/xsend.json
+      appid: 30920
+      signature: aee2694c405d4e2ec6d6f4ce46d857f5
+      signtype: normal
+      project: DcZpE2
+
+buisness:
+  smsCodeValidSeconds: 30000 #验证码有效时间 单位秒

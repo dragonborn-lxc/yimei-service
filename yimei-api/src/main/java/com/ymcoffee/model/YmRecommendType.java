@@ -1,4 +1,4 @@
-package com.ymcoffee.mapper.entity;
+package com.ymcoffee.model;
 
 public class YmRecommendType {
 

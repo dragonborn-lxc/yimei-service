@@ -1,24 +1,23 @@
 package com.ymcoffee.controller;
 
-import com.ymcoffee.mapper.entity.YmRecommendType;
-import com.ymcoffee.service.TestService;
+import com.ymcoffee.dao.hibernate.UserRepository;
+import com.ymcoffee.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/test")
 public class TestController {
 
     @Autowired
-    private TestService testService;
+    private UserRepository userRepository;
 
-    @GetMapping("/all")
-    public List<YmRecommendType> test() {
-        return testService.queryAll();
+    @RequestMapping("/test")
+    public void test() {
+        User u = new User();
+        u.setMobile("12346");
+        u.setNickname("nc");
+        userRepository.save(u);
     }
-
 }
