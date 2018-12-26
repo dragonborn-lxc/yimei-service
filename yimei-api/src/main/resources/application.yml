@@ -47,7 +47,7 @@ eureka:
 global:
   # 短信服务配置
   sms:
-    turnOn: true
+    turnOn: false
     submail:
       path: https://api.mysubmail.com/message/xsend.json
       appid: 30920

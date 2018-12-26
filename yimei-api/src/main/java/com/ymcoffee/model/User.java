@@ -7,6 +7,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,6 +22,9 @@ public class User extends BaseModel{
     private String mobile;
     private String portal;
     private LocalDateTime birthday;
+
+    @Enumerated(EnumType.STRING)
     private SexEnum sexEnum;
+
     private String password;
 }

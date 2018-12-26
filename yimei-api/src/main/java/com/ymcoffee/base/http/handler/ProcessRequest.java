@@ -2,6 +2,7 @@ package com.ymcoffee.base.http.handler;
 
 
 import com.ymcoffee.base.http.STRequest;
+import com.ymcoffee.base.tools.Ip;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-//import com.ymcoffee.base.tools.Ip;
 
 
 @Component
@@ -30,14 +30,12 @@ public class ProcessRequest {
         String service = StringUtils.uncapitalize(handlerMethod.getBeanType().getSimpleName().replace("Controller", ""));
         String method = handlerMethod.getMethod().getName();
 
-        String locale = request.getHeader("locale");
         STRequest.REQUEST_ID.set(UUID.randomUUID().toString());
         STRequest.SERVICE.set(service);
         STRequest.METHOD.set(method);
-//        STRequest.REMOTE_IP.set(Ip.getRemoteIp(request));
+        STRequest.REMOTE_IP.set(Ip.getRemoteIp(request));
 
         request.setAttribute("startTimeMillis", System.currentTimeMillis());
-
     }
 
     /**

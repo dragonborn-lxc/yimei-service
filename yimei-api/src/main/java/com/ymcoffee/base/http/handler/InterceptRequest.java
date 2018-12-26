@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -25,6 +26,13 @@ public class InterceptRequest extends WebMvcConfigurerAdapter {
         registry.addInterceptor(requestInterceptor());
     }
 
+    // 跨域
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
+
+
     @Bean
     public HandlerInterceptorAdapter requestInterceptor() {
         return new HandlerInterceptorAdapter() {
@@ -42,6 +50,13 @@ public class InterceptRequest extends WebMvcConfigurerAdapter {
                     processRequest.clearRequestContext();
                     processRequest.setRequestContext(request, (HandlerMethod) handler);
                 }
+
+                if (!((HandlerMethod) handler).getMethod().isAnnotationPresent(OpenInterface.class)
+                        && !((HandlerMethod) handler).getClass().isAnnotationPresent(OpenInterface.class)) {
+                    // todo 校验token
+                    return true;
+                }
+
                 return true;
             }
 
@@ -53,4 +68,5 @@ public class InterceptRequest extends WebMvcConfigurerAdapter {
             }
         };
     }
+
 }
