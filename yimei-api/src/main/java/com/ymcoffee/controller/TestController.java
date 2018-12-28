@@ -14,10 +14,7 @@ public class TestController {
     private UserRepository userRepository;
 
     @RequestMapping("/test")
-    public void test() {
-        User u = new User();
-        u.setMobile("12346");
-        u.setNickname("nc");
-        userRepository.save(u);
+    public String test() {
+        return "test";
     }
 }

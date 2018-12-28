@@ -5,6 +5,7 @@ import com.ymcoffee.base.exception.ServiceException;
 import com.ymcoffee.base.http.handler.OpenInterface;
 import com.ymcoffee.base.tools.MD5;
 import com.ymcoffee.dao.hibernate.UserRepository;
+import com.ymcoffee.entity.UserVo;
 import com.ymcoffee.model.User;
 import com.ymcoffee.service.SmsVerifyService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,7 +48,7 @@ public class AppAuthController {
      * 注册
      */
     @PostMapping("/open/register")
-    public User register(String mobile, String code, String password) {
+    public UserVo register(String mobile, String code, String password) {
         if(StringUtils.isEmpty(mobile)
                 || StringUtils.isEmpty(code)
                 || StringUtils.isEmpty(password)) {
@@ -66,14 +67,14 @@ public class AppAuthController {
         user.setRealname(mobile);
         user.setPassword(MD5.MD5Encode(password));
         userRepository.save(user);
-        return user;
+        return UserVo.from(user);
     }
 
     /**
      * 登录
      */
     @PostMapping("/open/login")
-    public User login(String mobile, String password) {
+    public UserVo login(String mobile, String password) {
         if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(password)) {
             throw new ServiceException(ExceptionCode.PARAM_TYPE_ERROR, "手机号和密码不能为空");
         }
@@ -83,7 +84,7 @@ public class AppAuthController {
             throw new ServiceException(ExceptionCode.INVALID_USER, "账号或密码错误");
         }
 
-        return allByMobileAndPassword.get(0);
+        return UserVo.from(allByMobileAndPassword.get(0));
     }
 
     /**
@@ -99,7 +100,7 @@ public class AppAuthController {
      * 修改密码
      */
     @PostMapping("/open/resetPassword")
-    public User resetPassword(String mobile, String password) {
+    public UserVo resetPassword(String mobile, String password) {
         List<User> users = userRepository.findAllByMobile(mobile);
         if(CollectionUtils.isEmpty(users)) {
             throw new ServiceException(ExceptionCode.INVALID_USER, "该手机号码不存在系统");
@@ -107,6 +108,6 @@ public class AppAuthController {
         User user = users.get(0);
         user.setPassword(MD5.MD5Encode(password));
         userRepository.merge(user);
-        return user;
+        return UserVo.from(user);
     }
 }
