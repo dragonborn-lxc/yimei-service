@@ -11,7 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableZuulProxy
 @EnableEurekaClient
-@ComponentScan(basePackages={"com.ymcoffee"})
+@ComponentScan
+@ComponentScan(basePackages={"com.ymcoffee.filter"})
 public class App extends SpringBootServletInitializer {
 
     /**

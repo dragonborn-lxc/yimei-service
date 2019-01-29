@@ -1,0 +1,10 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:adminv587NB1024@127.0.0.1:8761/eureka/
+
+zuul:
+  routes:
+    yimei-api:
+      path: /api/**
+      url: http://localhost:18001
