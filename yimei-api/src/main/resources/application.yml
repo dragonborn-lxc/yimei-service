@@ -28,7 +28,6 @@ spring:
     host: 127.0.0.1
     database: 0
 server:
-  context-path: /yimei-api
   tomcat:
     max-threads: 3000
     max-connections: 3000
