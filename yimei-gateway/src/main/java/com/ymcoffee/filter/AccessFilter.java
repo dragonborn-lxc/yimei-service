@@ -33,7 +33,7 @@ public class AccessFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
         //登入不进行token拦截
-        if ("/test/test".equals(request.getRequestURI())) {
+        if (request.getRequestURI().contains("/login")) {
             return false;
         }
         return true;
