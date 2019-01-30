@@ -7,4 +7,3 @@ zuul:
   routes:
     yimei-api:
       path: /api/**
-      url: http://localhost:18001
