@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: yimei
+  profiles:
+    active: prod
+  cloud:
+    config:
+      enabled: false

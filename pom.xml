@@ -12,6 +12,7 @@
         <module>yimei-gateway</module>
         <module>yimei-api</module>
         <module>eureka</module>
+        <module>yimei-util</module>
     </modules>
 
     <properties>

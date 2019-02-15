@@ -1,0 +1,1 @@
+nohup java -server -Xms512m -Xmx1024m -jar yimei-api.jar > yimei-api.log 2>&1 &
