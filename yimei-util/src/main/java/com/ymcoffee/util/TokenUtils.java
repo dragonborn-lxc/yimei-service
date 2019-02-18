@@ -58,6 +58,8 @@ public class TokenUtils {
             //del old refresh token
             jedis.del(account);
             jedis.del(tokenInfo.getString("access_token"));
+
+            //generate new token
             JSONObject json = TokenUtils.generate(account);
             return json;
         } catch(Exception e) {
@@ -69,15 +71,19 @@ public class TokenUtils {
         }
     }
 
-    public static void revoke(String account, String accessToken) throws Exception {
-        if (account == null || "".equals(account) || accessToken == null || "".equals(accessToken)) {
-            throw new Exception("account or accessToken can not be null");
+    public static void revoke(String account) throws Exception {
+        if (account == null || "".equals(account)) {
+            throw new Exception("account can not be null");
         }
         Jedis jedis = null;
         try {
             jedis = RedisUtils.getJedisPoolInstance().getResource();
-            jedis.del(accessToken);
-            jedis.del(account);
+            String text = jedis.get(account);
+            if (text != null && !"".equals(text)) {
+                JSONObject tokenInfo = JSON.parseObject(text);
+                jedis.del(tokenInfo.getString("access_token"));
+                jedis.del(account);
+            }
         } catch(Exception e) {
             throw new Exception("account or accessToken is not correct");
         } finally {
