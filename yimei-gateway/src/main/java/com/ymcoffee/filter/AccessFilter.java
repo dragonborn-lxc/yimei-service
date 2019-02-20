@@ -32,8 +32,8 @@ public class AccessFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        //登入不进行token拦截
-        if (request.getRequestURI().contains("/login")) {
+        //用户认证相关不进行token拦截
+        if (request.getRequestURI().contains("/app/auth")) {
             return false;
         }
         return true;
