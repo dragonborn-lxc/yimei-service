@@ -1,5 +1,6 @@
 package com.ymcoffee.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ymcoffee.base.tools.BeanUtils;
@@ -25,11 +26,21 @@ public class UserVo {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
     private SexEnum sexEnum;
+    private String accessToken;
+    private String refreshToken;
 
     public static UserVo from(User user) {
         UserVo vo = new UserVo();
         BeanUtils.copyNotNullProperties(user, vo);
 
+        return vo;
+    }
+
+    public static UserVo from(User user, String accessToken, String refreshToken) {
+        UserVo vo = new UserVo();
+        BeanUtils.copyNotNullProperties(user, vo);
+        vo.setAccessToken(accessToken);
+        vo.setRefreshToken(refreshToken);
         return vo;
     }
 }
