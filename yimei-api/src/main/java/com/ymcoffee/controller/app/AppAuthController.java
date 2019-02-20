@@ -1,5 +1,6 @@
 package com.ymcoffee.controller.app;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ymcoffee.base.exception.ExceptionCode;
 import com.ymcoffee.base.exception.ServiceException;
 import com.ymcoffee.base.http.handler.OpenInterface;
@@ -8,6 +9,7 @@ import com.ymcoffee.dao.hibernate.UserRepository;
 import com.ymcoffee.entity.UserVo;
 import com.ymcoffee.model.User;
 import com.ymcoffee.service.SmsVerifyService;
+import com.ymcoffee.util.TokenUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +86,17 @@ public class AppAuthController {
             throw new ServiceException(ExceptionCode.INVALID_USER, "账号或密码错误");
         }
 
-        return UserVo.from(allByMobileAndPassword.get(0));
+        //获取accessToken和refreshToken
+        JSONObject token = null;
+        try {
+            TokenUtils.revoke(mobile);
+            token = TokenUtils.generate(mobile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException(ExceptionCode.SYSTEM, "生产token失败");
+        }
+
+        return UserVo.from(allByMobileAndPassword.get(0), token.getString("access_token"), token.getString("refresh_token"));
     }
 
     /**
