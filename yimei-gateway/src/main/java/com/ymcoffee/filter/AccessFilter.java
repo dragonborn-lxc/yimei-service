@@ -1,5 +1,6 @@
 package com.ymcoffee.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -59,13 +60,22 @@ public class AccessFilter extends ZuulFilter {
                 }
                 String account = JwtUtils.parseJWT(oldRefreshToken).getSubject();
                 jedis = RedisUtils.getJedisPoolInstance().getResource();
-                String refreshToken = jedis.get(account);
+                String tokenInfo = jedis.get(account);
+                if (tokenInfo == null || "".equals(tokenInfo)) {
+                    logger.info("IP: [" + realIp + "] refresh_token does not existed,need to relogin");
+                    context.setSendZuulResponse(false);
+                    context.setResponseStatusCode(401);
+                    context.setResponseBody("access denied");
+                    context.getResponse().setContentType("text/html;charset=UTF-8");
+                    return null;
+                }
+                String refreshToken = JSONObject.parseObject(tokenInfo).getString("refresh_token");
                 if (!oldRefreshToken.equals(refreshToken)) {
                     logger.info("IP: [" + realIp + "] refresh_token is wrong,need to relogin");
                     context.setSendZuulResponse(false);
                     context.setResponseStatusCode(401);
                     context.setResponseBody("access denied");
-                    context.getResponse().setContentType("application/json;charset=UTF-8");
+                    context.getResponse().setContentType("text/html;charset=UTF-8");
                 }
             } else {
                 String accessToken = request.getHeader("access_token");
@@ -84,7 +94,7 @@ public class AccessFilter extends ZuulFilter {
                     context.setSendZuulResponse(false);
                     context.setResponseStatusCode(601);
                     context.setResponseBody("access denied");
-                    context.getResponse().setContentType("application/json;charset=UTF-8");
+                    context.getResponse().setContentType("text/html;charset=UTF-8");
                 }
             }
         } catch (JwtException e) {
@@ -92,7 +102,7 @@ public class AccessFilter extends ZuulFilter {
             context.setSendZuulResponse(false);
             context.setResponseStatusCode(401);
             context.setResponseBody("access denied");
-            context.getResponse().setContentType("application/json;charset=UTF-8");
+            context.getResponse().setContentType("text/html;charset=UTF-8");
         } finally {
             if (null != jedis) {
                 jedis.close();
