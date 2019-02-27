@@ -1,10 +1,8 @@
 package com.ymcoffee.filter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import com.ymcoffee.util.JwtUtils;
 import com.ymcoffee.util.RedisUtils;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
@@ -26,7 +24,7 @@ public class AccessFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 2;
+        return 0;
     }
 
     @Override
@@ -45,57 +43,25 @@ public class AccessFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
         String realIp = request.getHeader("X-Real-IP");
-        String grantType = request.getHeader("grant_type");
         Jedis jedis = null;
         try {
-            if (grantType != null && grantType.equals("refresh")) {
-                String oldRefreshToken = request.getHeader("refresh_token");
-                if (oldRefreshToken == null || "".equals(oldRefreshToken)) {
-                    logger.info("IP: [" + realIp + "] refresh_token is empty,request denied");
-                    context.setSendZuulResponse(false);
-                    context.setResponseStatusCode(403);
-                    context.setResponseBody("request denied");
-                    context.getResponse().setContentType("text/html;charset=UTF-8");
-                    return null;
-                }
-                String account = JwtUtils.parseJWT(oldRefreshToken).getSubject();
-                jedis = RedisUtils.getJedisPoolInstance().getResource();
-                String tokenInfo = jedis.get(account);
-                if (tokenInfo == null || "".equals(tokenInfo)) {
-                    logger.info("IP: [" + realIp + "] refresh_token does not existed,need to relogin");
-                    context.setSendZuulResponse(false);
-                    context.setResponseStatusCode(401);
-                    context.setResponseBody("access denied");
-                    context.getResponse().setContentType("text/html;charset=UTF-8");
-                    return null;
-                }
-                String refreshToken = JSONObject.parseObject(tokenInfo).getString("refresh_token");
-                if (!oldRefreshToken.equals(refreshToken)) {
-                    logger.info("IP: [" + realIp + "] refresh_token is wrong,need to relogin");
-                    context.setSendZuulResponse(false);
-                    context.setResponseStatusCode(401);
-                    context.setResponseBody("access denied");
-                    context.getResponse().setContentType("text/html;charset=UTF-8");
-                }
-            } else {
-                String accessToken = request.getHeader("access_token");
-                if (accessToken == null || "".equals(accessToken)) {
-                    logger.info("IP: [" + realIp + "] access_token is empty,request denied");
-                    context.setSendZuulResponse(false);
-                    context.setResponseStatusCode(403);
-                    context.setResponseBody("request denied");
-                    context.getResponse().setContentType("text/html;charset=UTF-8");
-                    return null;
-                }
-                jedis = RedisUtils.getJedisPoolInstance().getResource();
-                boolean existed = jedis.exists(accessToken);
-                if (!existed) {
-                    logger.info("IP: [" + realIp + "] access_token is wrong,need refresh_token to get latest token");
-                    context.setSendZuulResponse(false);
-                    context.setResponseStatusCode(601);
-                    context.setResponseBody("access denied");
-                    context.getResponse().setContentType("text/html;charset=UTF-8");
-                }
+            String accessToken = request.getHeader("access_token");
+            if (accessToken == null || "".equals(accessToken)) {
+                logger.info("IP: [" + realIp + "] access_token is empty,request denied");
+                context.setSendZuulResponse(false);
+                context.setResponseStatusCode(403);
+                context.setResponseBody("request denied");
+                context.getResponse().setContentType("text/html;charset=UTF-8");
+                return null;
+            }
+            jedis = RedisUtils.getJedisPoolInstance().getResource();
+            boolean existed = jedis.exists(accessToken);
+            if (!existed) {
+                logger.info("IP: [" + realIp + "] access_token is wrong,need refresh_token to get latest token");
+                context.setSendZuulResponse(false);
+                context.setResponseStatusCode(601);
+                context.setResponseBody("access denied");
+                context.getResponse().setContentType("text/html;charset=UTF-8");
             }
         } catch (JwtException e) {
             logger.info("IP: [" + realIp + "] refresh_token expired or be wrong,need to relogin");

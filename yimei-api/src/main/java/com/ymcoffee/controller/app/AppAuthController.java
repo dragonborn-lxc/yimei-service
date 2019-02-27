@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -121,5 +122,21 @@ public class AppAuthController {
         user.setPassword(MD5.MD5Encode(password));
         userRepository.merge(user);
         return UserVo.from(user);
+    }
+
+    /**
+     * 获取刷新token
+     * @param refreshToken
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/token/refresh", consumes = "application/json", produces = "application/json")
+    public JSONObject refresh(String refreshToken) {
+        JSONObject obj = null;
+        try {
+            obj = TokenUtils.refresh(refreshToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 }
