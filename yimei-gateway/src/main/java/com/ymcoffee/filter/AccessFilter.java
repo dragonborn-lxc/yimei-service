@@ -31,11 +31,11 @@ public class AccessFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
-        //用户认证相关不进行token拦截
-        if (request.getRequestURI().contains("/app/auth")) {
-            return false;
+        //用户操作需进行token拦截
+        if (request.getRequestURI().contains("/app/operate")) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
