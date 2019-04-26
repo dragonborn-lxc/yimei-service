@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface DictionaryRepository extends ExtJpaRepository<Dictionary, Long> {
 
-    List<Dictionary> findAllByIdOrderByCode(int id);
+    List<Dictionary> findAllByCodeOrderBySubcode(int code);
 
 }

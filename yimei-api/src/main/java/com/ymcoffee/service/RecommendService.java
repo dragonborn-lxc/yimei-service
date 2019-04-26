@@ -36,7 +36,7 @@ public class RecommendService {
 
     public List<RecommendTypeVo> getRecommendTypeList() {
         //查询所有首页推荐类别
-        List<Dictionary> dictionaryList = dictionaryRepository.findAllByIdOrderByCode(1);
+        List<Dictionary> dictionaryList = dictionaryRepository.findAllByCodeOrderBySubcode(1);
         List<RecommendTypeVo> recommendTypeList = dictionaryList.stream().map(result -> {
             RecommendTypeVo obj = new RecommendTypeVo();
             obj.setId(result.getSubcode());
