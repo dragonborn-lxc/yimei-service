@@ -55,12 +55,12 @@ public class RecommendService {
             recommendProductVo.setId(obj.getProdId());
             recommendProductVo.setName(obj.getProdName());
             recommendProductVo.setUrl(obj.getImgUrl());
-            if (map.containsKey(obj.getProdType())) {
+            if (map.containsKey(obj.getRecommendType())) {
                 map.get(obj.getProdType()).add(recommendProductVo);
             } else {
                 List<RecommendProductVo> tmpList = new ArrayList<>();
                 tmpList.add(recommendProductVo);
-                map.put(obj.getProdType(), tmpList);
+                map.put(obj.getRecommendType(), tmpList);
             }
         }
         return map;
