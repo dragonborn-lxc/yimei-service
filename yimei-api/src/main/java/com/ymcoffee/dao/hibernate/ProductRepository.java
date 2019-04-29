@@ -2,14 +2,14 @@ package com.ymcoffee.dao.hibernate;
 
 
 import com.ymcoffee.dao.hibernate.base.ExtJpaRepository;
-import com.ymcoffee.model.Derivative;
+import com.ymcoffee.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 
-public interface DerivativeRepository extends ExtJpaRepository<Derivative, Long> {
+public interface ProductRepository extends ExtJpaRepository<Product, Long> {
 
-    Page<Derivative> findAll(Specification<Derivative> spec, Pageable pageable);
+    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
 }
