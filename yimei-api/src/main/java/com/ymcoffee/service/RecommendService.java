@@ -29,9 +29,8 @@ public class RecommendService {
     @Autowired
     private RecommendProductRepository recommendProductRepository;
 
-    public List<String> getBannerList() {
-        List<Banner> list = bannerRepository.findAll();
-        return list.stream().map(Banner::getUrl).collect(Collectors.toList());
+    public List<Banner> getBannerList() {
+        return bannerRepository.findAll();
     }
 
     public List<RecommendTypeVo> getRecommendTypeList() {

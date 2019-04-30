@@ -3,6 +3,7 @@ package com.ymcoffee.controller.app;
 import com.alibaba.fastjson.JSONObject;
 import com.ymcoffee.entity.RecommendProductVo;
 import com.ymcoffee.entity.RecommendTypeVo;
+import com.ymcoffee.model.Banner;
 import com.ymcoffee.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,15 +20,10 @@ public class AppHomeController {
     @Autowired
     private RecommendService recommendService;
 
-    @PostMapping("/recommend/banner")
-    public List<String> banner() {
-        return recommendService.getBannerList();
-    }
-
     @PostMapping("/recommend/index")
     public JSONObject index() {
         JSONObject json = new JSONObject();
-        List<String> bannerList = recommendService.getBannerList();
+        List<Banner> bannerList = recommendService.getBannerList();
         List<RecommendTypeVo> recommendTypeList = recommendService.getRecommendTypeList();
         Map<Integer, List<RecommendProductVo>> recommendProductList = recommendService.getRecommendProductList();
         json.put("bannerList", bannerList);
