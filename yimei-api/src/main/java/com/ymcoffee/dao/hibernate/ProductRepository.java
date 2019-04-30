@@ -10,6 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface ProductRepository extends ExtJpaRepository<Product, Long> {
 
-    Page<Product> findAll(Specification<Product> spec, Pageable pageable);
+	Page<Product> findAll(Specification<Product> spec, Pageable pageable);
 
 }

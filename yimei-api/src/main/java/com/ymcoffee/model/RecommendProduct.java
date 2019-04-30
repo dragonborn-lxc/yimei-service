@@ -14,18 +14,18 @@ import javax.persistence.Entity;
 @Where(clause = "is_deleted=0")
 @SQLDelete(sql = "update ym_recommend_product set is_deleted=1,update_time=now() where id=?")
 public class RecommendProduct extends BaseModel {
-    @Column(name = "recommend_type")
-    private Integer recommendType;
+	@Column(name = "recommend_type")
+	private Integer recommendType;
 
-    @Column(name = "prod_type")
-    private Integer prodType;
+	@Column(name = "prod_type")
+	private Integer prodType;
 
-    @Column(name = "prod_id")
-    private Long prodId;
+	@Column(name = "prod_id")
+	private Long prodId;
 
-    @Column(name = "prod_name")
-    private String prodName;
+	@Column(name = "prod_name")
+	private String prodName;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+	@Column(name = "img_url")
+	private String imgUrl;
 }

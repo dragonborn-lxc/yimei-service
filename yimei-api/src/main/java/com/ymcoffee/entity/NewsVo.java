@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RecommendTypeVo {
-	private Integer id;
-	private String name;
+public class NewsVo {
+	private String url;
+	private String imgUrl;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RecommendProductRepository extends ExtJpaRepository<RecommendProduct, Long> {
 
-    @Query(value = "select * from ym_recommend_product where is_deleted = 0 order by create_time", nativeQuery = true)
-    List<RecommendProduct> findAll();
+	@Query(value = "select * from ym_recommend_product where is_deleted = 0 order by create_time", nativeQuery = true)
+	List<RecommendProduct> findAll();
 
 }

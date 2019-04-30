@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 @Getter
 @Setter
 public class Dictionary extends BaseModel {
-    private Integer code;
-    private Integer subcode;
+	private Integer code;
+	private Integer subcode;
 
-    @Column(name = "code_desc")
-    private String codeDesc;
+	@Column(name = "code_desc")
+	private String codeDesc;
 
-    @Column(name = "subcode_desc")
-    private String subcodeDesc;
+	@Column(name = "subcode_desc")
+	private String subcodeDesc;
 }
