@@ -26,19 +26,15 @@ public class ArtService {
 		Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
 		StringBuilder queryHql = new StringBuilder("select a.id,a.name,a.brand,a.year,a.price,a.artist,b.subcode_desc as category,c.subcode_desc as theme,a.size,a.thumbnail_img_url as thumbnailImgUrl from ym_product a left join ym_dictionary b on b.code = 3 and a.category = b.subcode left join ym_dictionary c on c.code = 4 and a.theme = c.subcode where a.is_deleted = 0 and a.type = 1");
 		String countHql = "select count(*) from ym_product where is_deleted = 0 and type = 1";
-		Query query = entityManager.createNativeQuery(queryHql.toString());
-		Query count = entityManager.createNativeQuery(countHql);
 		if (params.getCategory() != 0) {
 			queryHql.append(" and a.category = :category");
-			query.setParameter("category", params.getCategory());
 		}
 		if (params.getTheme() != 0) {
 			queryHql.append(" and a.theme = :theme");
-			query.setParameter("theme", params.getTheme());
 		}
 		switch (sortIndex) {
 			case 0:
-				queryHql.append(" order by a.createTime desc,a.updateTime desc,a.id asc");
+				queryHql.append(" order by a.create_time desc,a.update_time desc,a.id asc");
 				break;
 			case 1:
 				queryHql.append(" order by a.price asc,a.id asc");
@@ -53,8 +49,16 @@ public class ArtService {
 				queryHql.append(" order by a.year desc,a.id asc");
 				break;
 			default:
-				queryHql.append(" order by a.createTime desc,a.updateTime desc,a.id asc");
+				queryHql.append(" order by a.create_time desc,a.update_time desc,a.id asc");
 				break;
+		}
+		Query query = entityManager.createNativeQuery(queryHql.toString());
+		Query count = entityManager.createNativeQuery(countHql);
+		if (params.getCategory() != 0) {
+			query.setParameter("category", params.getCategory());
+		}
+		if (params.getTheme() != 0) {
+			query.setParameter("theme", params.getTheme());
 		}
 		query.setFirstResult(pageable.getOffset());
 		query.setMaxResults(pageable.getPageSize());
