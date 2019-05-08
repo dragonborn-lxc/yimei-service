@@ -17,24 +17,24 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class ArtService {
+public class DerivativeService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public List<ProductClassifyVo> getArtList(ProductParamsVo params, int pageNumber, int pageSize, int sortIndex) {
+	public List<ProductClassifyVo> getDerivativeList(ProductParamsVo params, int pageNumber, int pageSize, int sortIndex) {
 		Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
-		StringBuilder queryHql = new StringBuilder("select a.id,a.name,a.brand,a.year,a.price,a.artist,b.subcode_desc as category,c.subcode_desc as theme,a.size from ym_product a left join ym_dictionary b on b.code = 3 and a.category = b.subcode left join ym_dictionary c on c.code = 4 and a.theme = c.subcode where a.is_deleted = 0 and a.type = 1");
-		String countHql = "select count(*) from ym_product where is_deleted = 0 and type = 1";
+		StringBuilder queryHql = new StringBuilder("select a.id,a.name,a.brand,a.year,a.price,a.artist,b.subcode_desc as category,c.subcode_desc as theme,a.size from ym_product a left join ym_dictionary b on b.code = 3 and a.category = b.subcode left join ym_dictionary c on c.code = 4 and a.theme = c.subcode where a.is_deleted = 0 and a.type = 2");
+		String countHql = "select count(*) from ym_product where is_deleted = 0 and type = 2";
 		Query query = entityManager.createNativeQuery(queryHql.toString());
 		Query count = entityManager.createNativeQuery(countHql);
 		if (params.getCategory() != 0) {
 			queryHql.append(" and a.category = :category");
 			query.setParameter("category", params.getCategory());
 		}
-		if (params.getTheme() != 0) {
-			queryHql.append(" and a.theme = :theme");
-			query.setParameter("theme", params.getTheme());
+		if (params.getTexture() != 0) {
+			queryHql.append(" and a.texture = :texture");
+			query.setParameter("texture", params.getTexture());
 		}
 		switch (sortIndex) {
 			case 0:
