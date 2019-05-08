@@ -19,4 +19,5 @@ public class ProductClassifyVo {
 	private String theme;
 	private String texture;
 	private String size;
+	private String thumbnailImgUrl;
 }

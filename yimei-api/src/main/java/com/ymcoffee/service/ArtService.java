@@ -24,7 +24,7 @@ public class ArtService {
 
 	public List<ProductClassifyVo> getArtList(ProductParamsVo params, int pageNumber, int pageSize, int sortIndex) {
 		Pageable pageable = new PageRequest(pageNumber - 1, pageSize);
-		StringBuilder queryHql = new StringBuilder("select a.id,a.name,a.brand,a.year,a.price,a.artist,b.subcode_desc as category,c.subcode_desc as theme,a.size from ym_product a left join ym_dictionary b on b.code = 3 and a.category = b.subcode left join ym_dictionary c on c.code = 4 and a.theme = c.subcode where a.is_deleted = 0 and a.type = 1");
+		StringBuilder queryHql = new StringBuilder("select a.id,a.name,a.brand,a.year,a.price,a.artist,b.subcode_desc as category,c.subcode_desc as theme,a.size,a.thumbnail_img_url as thumbnailImgUrl from ym_product a left join ym_dictionary b on b.code = 3 and a.category = b.subcode left join ym_dictionary c on c.code = 4 and a.theme = c.subcode where a.is_deleted = 0 and a.type = 1");
 		String countHql = "select count(*) from ym_product where is_deleted = 0 and type = 1";
 		Query query = entityManager.createNativeQuery(queryHql.toString());
 		Query count = entityManager.createNativeQuery(countHql);
