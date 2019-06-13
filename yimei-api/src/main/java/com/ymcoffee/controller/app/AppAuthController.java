@@ -13,10 +13,7 @@ import com.ymcoffee.util.TokenUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -129,8 +126,8 @@ public class AppAuthController {
      * @param refreshToken
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/token/refresh", consumes = "application/json", produces = "application/json")
-    public JSONObject refresh(String refreshToken) {
+    @RequestMapping(method = RequestMethod.POST, value = "/token/refresh", produces = "application/json")
+    public JSONObject refresh(@RequestParam("refresh_token") String refreshToken) {
         JSONObject obj = null;
         try {
             obj = TokenUtils.refresh(refreshToken);
