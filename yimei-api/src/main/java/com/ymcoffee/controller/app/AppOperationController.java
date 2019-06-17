@@ -68,7 +68,7 @@ public class AppOperationController {
 
 	@PostMapping("/collect/sum")
 	public long count(@RequestBody CollectParamsVo request) {
-		if (request.getUserId() == null || request.getProdId() == null) {
+		if (request.getUserId() == null) {
 			return 0;
 		}
 		Collect collect = new Collect();
