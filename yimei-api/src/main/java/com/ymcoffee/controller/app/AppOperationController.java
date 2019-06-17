@@ -66,4 +66,15 @@ public class AppOperationController {
 		return collectService.getCollectList(request.getUserId(), request.getPageNumber(), request.getPageSize());
 	}
 
+	@PostMapping("/sum")
+	public long count(@RequestBody CollectParamsVo request) {
+		if (request.getUserId() == null || request.getProdId() == null) {
+			return 0;
+		}
+		Collect collect = new Collect();
+		collect.setUserId(request.getUserId());
+		collect.setProdId(request.getProdId());
+		return collectRepository.countByUserIdAndProdId(request.getUserId(), request.getProdId());
+	}
+
 }
