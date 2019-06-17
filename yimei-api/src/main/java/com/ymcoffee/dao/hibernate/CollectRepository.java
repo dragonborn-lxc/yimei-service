@@ -15,5 +15,5 @@ public interface CollectRepository extends ExtJpaRepository<Collect, Long> {
 
 	List<Collect> findAllByUserIdAndProdId(long userId, long prodId);
 
-	Long countByUserIdAndProdId(long userId, long prodId);
+	Long countByUserId(long userId);
 }

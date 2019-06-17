@@ -27,7 +27,7 @@ public class AppOperationController {
 	@Autowired
 	private CollectService collectService;
 
-	@PostMapping("/collect")
+	@PostMapping("/collect/collect")
 	public int collect(@RequestBody CollectParamsVo request) {
 		if (request.getUserId() == null || request.getProdId() == null) {
 			return 0;
@@ -40,7 +40,7 @@ public class AppOperationController {
 		return 1;
 	}
 
-	@PostMapping("/uncollect")
+	@PostMapping("/collect/uncollect")
 	public int uncollect(@RequestBody CollectParamsVo request) {
 		if (request.getUserId() == null || request.getProdId() == null) {
 			return 0;
@@ -52,7 +52,7 @@ public class AppOperationController {
 		return 1;
 	}
 
-	@PostMapping("/exist")
+	@PostMapping("/collect/exist")
 	public boolean exist(@RequestBody CollectParamsVo request) {
 		List<Collect> list = collectRepository.findAllByUserIdAndProdId(request.getUserId(), request.getProdId());
 		if (list == null || list.size() == 0) {
@@ -61,20 +61,19 @@ public class AppOperationController {
 		return true;
 	}
 
-	@PostMapping("/all")
+	@PostMapping("/collect/all")
 	public List<ProductClassifyVo> all(@RequestBody CollectParamsVo request) {
 		return collectService.getCollectList(request.getUserId(), request.getPageNumber(), request.getPageSize());
 	}
 
-	@PostMapping("/sum")
+	@PostMapping("/collect/sum")
 	public long count(@RequestBody CollectParamsVo request) {
 		if (request.getUserId() == null || request.getProdId() == null) {
 			return 0;
 		}
 		Collect collect = new Collect();
 		collect.setUserId(request.getUserId());
-		collect.setProdId(request.getProdId());
-		return collectRepository.countByUserIdAndProdId(request.getUserId(), request.getProdId());
+		return collectRepository.countByUserId(request.getUserId());
 	}
 
 }
