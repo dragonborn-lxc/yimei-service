@@ -5,10 +5,12 @@ import com.ymcoffee.base.exception.ServiceException;
 import com.ymcoffee.base.tools.CommonUtils;
 import com.ymcoffee.dao.hibernate.SmsVerifyRepository;
 import com.ymcoffee.model.SmsVerify;
+import com.ymcoffee.util.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class SmsVerifyService {
      * @param mobile
      */
     public String sendSmsVerify(String mobile) {
+        Jedis jedis = RedisUtils.getJedisPoolInstance().getResource();
+        if (jedis.exists(mobile)) {
+            throw new ServiceException(ExceptionCode.PARAM_TYPE_ERROR, "验证码在60秒内请求过多");
+        };
         String verifyCode = CommonUtils.genRandomNumCode(4);
         smsService.sendSms("86", mobile, verifyCode);
 
@@ -39,7 +45,7 @@ public class SmsVerifyService {
         smsVerify.setMobile(mobile);
         smsVerify.setValid(true);
         smsVerifyRepository.save(smsVerify);
-
+        jedis.set(mobile, "1", "NX", "EX", 59);
         return verifyCode;
     }
 
